@@ -1,0 +1,13 @@
+{
+    "name": "aheenam/laravel-translatable",
+    "description": "A Laravel Package to manage translations for models simply using a Trait",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rathes Sachchithananthan",
+            "email": "rathes@aheenam.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
