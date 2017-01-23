@@ -1,13 +1,27 @@
 {
-    "name": "aheenam/laravel-translatable",
-    "description": "A Laravel Package to manage translations for models simply using a Trait",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Rathes Sachchithananthan",
-            "email": "rathes@aheenam.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {}
+  "name": "aheenam/laravel-translatable",
+  "description": "A Laravel Package to manage translations for models simply using a Trait",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Rathes Sachchithananthan",
+      "email": "rathes@aheenam.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php" : "^7.0",
+    "illuminate/support": "~5.3.0|~5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.*"
+  },
+  "psr-4": {
+    "Aheenam\\Translatable\\": "src"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Aheenam\\Translatable\\Test\\": "tests"
+    }
+  }
 }
