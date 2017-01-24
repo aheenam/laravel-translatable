@@ -21,8 +21,10 @@ abstract class TestCase extends Orchestra {
         // path unless `--path` option is available.
         $this->loadMigrationsFrom([
             '--database' => 'testing',
-            '--realpath' => realpath(__DIR__.'/../database/migrations'),
+            '--realpath' => realpath(__DIR__.'//migrations'),
         ]);
+
+        $this->withFactories(__DIR__ . '/../database/factories');
 
     }
 

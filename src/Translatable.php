@@ -70,6 +70,37 @@ trait Translatable {
             : [];
     }
 
+
+
+    /**
+     * @param $locale
+     * @param $translations
+     * @return void
+     */
+    protected function setTranslationByArray ( $locale, $translations )
+    {
+        foreach ( $translations as $attribute => $translation ) {
+            $this->setTranslation($locale, $attribute, $translation);
+        }
+    }
+
+
+
+    /**
+     * @param $locale
+     * @param $attribute
+     * @param $translation
+     * @return void
+     */
+    protected function setTranslation($locale, $attribute, $translation)
+    {
+        $this->translations()->create([
+            'key'               => $attribute,
+            'translation'       => $translation,
+            'locale'            => $locale,
+        ]);
+    }
+
     /**
      * returns if given key is translatable
      *
@@ -79,6 +110,22 @@ trait Translatable {
     protected function isTranslatableAttribute($key)
     {
         return in_array($key, $this->getTranslatableAttributes());
+    }
+
+    /**
+     * @param $method
+     * @param $arguments
+     * @return bool|mixed
+     */
+    public function __call($method, $arguments)
+    {
+
+        if ( $method === 'translate' && count($arguments) === 2 ) {
+            return call_user_func_array([$this, 'setTranslationByArray'], $arguments);
+        }
+
+        return false;
+
     }
 
 }

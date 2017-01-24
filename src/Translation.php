@@ -11,6 +11,8 @@ class Translation extends Model {
      */
     protected $table = 'translatable_translations';
 
+    protected $fillable = ['key', 'locale', 'translation'];
+
     /**
      * Get all of the owning translatable models.
      *
