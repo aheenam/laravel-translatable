@@ -23,7 +23,7 @@ class CreateTranslatableTranslationsTable extends Migration
             $table->string('locale', 5);
             $table->timestamps();
 
-            $table->index(['translatable_id', 'translatable_model']);
+            $table->index(['translatable_id', 'translatable_type']);
 
         });
     }
