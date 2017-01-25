@@ -122,6 +122,7 @@ class TranslatableTest extends TestCase
         // expect name to be testName and testName_de in de
         $this->assertEquals('testName_de', $testModel->in('de')->name);
         $this->assertEquals('testName', $testModel->name);
+        $this->assertEquals('testPlace', $testModel->in('de')->place);
 
     }
 
