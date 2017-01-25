@@ -56,8 +56,6 @@ class TranslatableTest extends TestCase
 
         // test model has translation for language "fr"
         $testModel->translations()->save(new Translation([
-            'translatable_type' => TestModel::class,
-            'translatable_id'   => $testModel->id,
             'key'               => 'name',
             'translation'       => 'testValue_fr',
             'locale'            => 'fr'
@@ -79,19 +77,51 @@ class TranslatableTest extends TestCase
             'place' => 'France'
         ]);
 
+        // add some translation
         $testModel->translate('de', [
             'name'      => 'TestWert',
             'place'     => 'Frankreich'
         ]);
 
-        $deName = $testModel->translations()->where('translatable_type', TestModel::class)
-            ->where('translatable_id', $testModel->id)
-            ->where('key', 'place')
-            ->where('locale', 'de')
-            ->value('translation');
+        // change language
+        App::setLocale('de');
 
-        $this->assertNotEquals('Frankreich', $deName);
-        $this->assertEquals('France', $deName);
+        // expect name to be translated, but not place
+        $this->assertEquals('TestWert', $testModel->name);
+        $this->assertEquals('France', $testModel->place);
+
+        //expect that there does not even a place translation
+        $placeTranslation = $testModel->translations()
+            ->where('locale', 'de')
+            ->where('key', 'place')
+            ->first();
+        $this->assertNull($placeTranslation);
+
+    }
+
+
+    /**
+     * @return void
+     */
+    public function test_translate_whole_model()
+    {
+        // test model with default value for attribute "name"
+        $testModel = factory(TestModel::class)->create([
+            'name'  => 'testName',
+            'place' => 'testPlace',
+        ]);
+
+        // set a translation
+        $testModel->translate('de', [
+            'name' => 'testName_de'
+        ]);
+
+        // make sure that app locale is different from de
+        App::setLocale('en');
+
+        // expect name to be testName and testName_de in de
+        $this->assertEquals('testName_de', $testModel->in('de')->name);
+        $this->assertEquals('testName', $testModel->name);
 
     }
 

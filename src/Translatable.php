@@ -11,10 +11,10 @@ trait Translatable {
      * @param $key
      * @return mixed
      */
-    public function getAttributeValue($key )
+    public function getAttributeValue( $key )
     {
 
-        if (!$this->isTranslatableAttribute($key)) {
+        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == App::getLocale() ) {
             return parent::getAttributeValue($key);
         }
 
@@ -32,6 +32,30 @@ trait Translatable {
     public function translateAttribute( $key, $locale )
     {
         return $this->getTranslation($key, $locale);
+    }
+
+
+    /**
+     * @param $locale
+     * @return Translatable
+     */
+    public function in( $locale )
+    {
+
+        $translatedModel = new self();
+
+        foreach ( $this->getAttributes() as $attribute => $value ) {
+
+            if ( $this->isTranslatableAttribute( $attribute ) ) {
+                $translatedModel->setAttribute($attribute, $this->getTranslation($attribute, $locale));
+            } else {
+                $translatedModel->setAttribute($attribute, $this->getAttribute($attribute));
+            }
+
+        }
+
+        return $translatedModel;
+
     }
 
     /**
@@ -80,7 +104,9 @@ trait Translatable {
     protected function setTranslationByArray ( $locale, $translations )
     {
         foreach ( $translations as $attribute => $translation ) {
-            $this->setTranslation($locale, $attribute, $translation);
+            if ( $this->isTranslatableAttribute($attribute) ) {
+                $this->setTranslation($locale, $attribute, $translation);
+            }
         }
     }
 
