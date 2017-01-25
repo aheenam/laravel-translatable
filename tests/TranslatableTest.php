@@ -127,4 +127,24 @@ class TranslatableTest extends TestCase
     }
 
 
+    public function test_getting_translation_of_attribute_by_function()
+    {
+        // test model with default value for attribute "name"
+        $testModel = factory(TestModel::class)->create([
+            'name'  => 'testName',
+            'place' => 'testPlace',
+        ]);
+
+        // set a translation
+        $testModel->translate('de', [
+            'name' => 'testName_de'
+        ]);
+
+        $this->assertEquals( 'testName_de', $testModel->translate('name', 'de' ) );
+        $this->assertEquals( 'testPlace', $testModel->translate('place', 'de' ) );
+
+
+    }
+
+
 }

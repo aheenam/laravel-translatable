@@ -93,7 +93,13 @@ trait Translatable {
      */
     protected function translateAttribute( $key, $locale )
     {
+
+        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale ) {
+            return parent::getAttributeValue($key);
+        }
+
         return $this->getTranslation($key, $locale);
+
     }
 
 
@@ -150,6 +156,8 @@ trait Translatable {
 
         if ( $method === 'translate' && count($arguments) === 2 && is_array($arguments[1]) ) {
             return call_user_func_array([$this, 'setTranslationByArray'], $arguments);
+        } elseif ( $method === 'translate' && count($arguments) === 2 && !is_array($arguments[1]) ) {
+            return call_user_func_array([$this, 'translateAttribute'], $arguments);
         }
 
         return false;
