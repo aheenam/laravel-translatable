@@ -22,18 +22,6 @@ trait Translatable {
 
     }
 
-    /**
-     * returns the translation of a key for a given key/locale pair
-     *
-     * @param $key
-     * @param $locale
-     * @return mixed
-     */
-    public function translateAttribute( $key, $locale )
-    {
-        return $this->getTranslation($key, $locale);
-    }
-
 
     /**
      * @param $locale
@@ -97,6 +85,20 @@ trait Translatable {
 
 
     /**
+     * returns the translation of a key for a given key/locale pair
+     *
+     * @param $key
+     * @param $locale
+     * @return mixed
+     */
+    protected function translateAttribute( $key, $locale )
+    {
+        return $this->getTranslation($key, $locale);
+    }
+
+
+
+    /**
      * @param $locale
      * @param $translations
      * @return void
@@ -146,7 +148,7 @@ trait Translatable {
     public function __call($method, $arguments)
     {
 
-        if ( $method === 'translate' && count($arguments) === 2 ) {
+        if ( $method === 'translate' && count($arguments) === 2 && is_array($arguments[1]) ) {
             return call_user_func_array([$this, 'setTranslationByArray'], $arguments);
         }
 
