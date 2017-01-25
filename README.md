@@ -76,6 +76,20 @@ You can also use
 $myModel->translate('place', 'de'); // returns 'Deutschland'
 ```
 
+### Getting the translated model
+Sometime you want to keep the model properties untouched but get a translated version of your model. You can reach
+this by using
+
+```php
+$translatedModel = $myModel->in('de');
+
+echo $translatedModel->place; // returns 'Deutschland'
+
+// shorter
+echo $myModel->in('de')->place; // returns 'Deutschland'
+
+```
+
 ### Translating an Model
 
 You can translate a model using
