@@ -1,6 +1,28 @@
-laravel-translatable
+A Trait to handle Translations in Laravel
 ===
-A Laravel Package to manage translations for models simply using a Trait
+This is a Laravel package containing a trait for translatable Eloquent models. This package follows
+the approach to have only a single table to maintain all the translations.
+
+This approach may not be perfect for every use case as the table can grow really big. But compared to all the
+other packages this approach is the most flexible as it lets you make models and its attributes translatable
+without extra configuration.
+
+Alternatives to this package are following packages:
+
+1. [Spatie/laravel-translatable](https://github.com/spatie/laravel-translatable) saves the translatable
+attributes as jsons
+2. [dimsav/laravel-translatable](https://github.com/dimsav/laravel-translatable) expects a new table for
+every new model that has translatable attributes
+
+## Todo
+
+This project has not reached a stable status, there are still some methods that must be implemented before v1.0
+can be released
+
+- remove an attributes translation
+- remove all (or a locale's) translations of an model
+- return default value if translation is not present
+- make sure that translation is updated on multiple saves
 
 Installation
 ---
