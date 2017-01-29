@@ -4,7 +4,8 @@ $factory->define(Aheenam\Translatable\Test\Models\TestModel::class, function (Fa
 
     return [
         'name'  => $faker->name,
-        'place' => $faker->city
+        'place' => $faker->city,
+        'title' => $faker->title
     ];
 
 });

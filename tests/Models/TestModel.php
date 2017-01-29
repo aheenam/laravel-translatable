@@ -17,6 +17,6 @@ class TestModel extends Eloquent
     protected $guarded = [];
     public $timestamps = false;
 
-    protected $translatable = ['name'];
+    protected $translatable = ['name', 'title'];
 
 }

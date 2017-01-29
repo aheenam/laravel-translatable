@@ -127,6 +127,10 @@ class TranslatableTest extends TestCase
     }
 
 
+
+    /**
+     * @return void
+     */
     public function test_getting_translation_of_attribute_by_function()
     {
         // test model with default value for attribute "name"
@@ -143,6 +147,163 @@ class TranslatableTest extends TestCase
         $this->assertEquals( 'testName_de', $testModel->translate('name', 'de' ) );
         $this->assertEquals( 'testPlace', $testModel->translate('place', 'de' ) );
 
+
+    }
+
+
+
+    /**
+     * @return void
+     */
+    public function test_it_updates_translation_on_multiple_saves()
+    {
+        // test model with default value for attribute "name"
+        $testModel = factory(TestModel::class)->create([
+            'name'  => 'testName',
+            'place' => 'testPlace',
+        ]);
+
+        // set a translation
+        $testModel->translate('de', [
+            'name' => 'testName_de'
+        ]);
+
+        // update a translation
+        $testModel->translate('de', [
+            'name' => 'testName_de_update'
+        ]);
+
+        $translationsCount = $testModel->translations()
+            ->where('locale', 'de')
+            ->where('key', 'name')
+            ->count();
+
+        $this->assertEquals(1, $translationsCount);
+        $this->assertEquals('testName_de_update', $testModel->in('de')->name);
+
+    }
+
+
+    /**
+     * @return void
+     */
+    public function test_it_returns_all_translations()
+    {
+        // test model with default value for attribute "name"
+        $testModel = factory(TestModel::class)->create([
+            'name'  => 'testName',
+            'place' => 'testPlace',
+        ]);
+
+        // set a translation
+        $testModel->translate('de', [
+            'name'      => 'testName_de',
+            'title'     => 'title_de'
+        ]);
+
+        // set another translation
+        $testModel->translate('fr', [
+            'name' => 'testName_fr'
+        ]);
+
+        // set another translation
+        $testModel->translate('it', [
+            'name' => 'testName_it'
+        ]);
+
+        // set another translation
+        $testModel->translate('es', [
+            'name' => 'testName_es'
+        ]);
+
+        $allTranslations = $testModel->allTranslations();
+
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $allTranslations);
+        $this->assertEquals(4, $allTranslations->count());
+
+    }
+
+
+
+    /**
+     * @return void
+     */
+    public function test_it_returns_default_value_if_one_attribute_not_present()
+    {
+        // test model with default value for attribute "name"
+        $testModel = factory(TestModel::class)->create([
+            'name'      => 'testName',
+            'title'     => 'testTitle'
+        ]);
+
+        // set another translation
+        $testModel->translate('es', [
+            'name' => 'testName_es'
+        ]);
+
+        $this->assertEquals('testTitle', $testModel->in('es')->title);
+
+    }
+
+
+
+    /**
+     * @return void
+     */
+    public function test_it_removes_a_complete_locale()
+    {
+
+        $testModel = factory(TestModel::class)->create([
+            'name'      => 'testName',
+            'title'     => 'testTitle'
+        ]);
+
+        $testModel->translate('es', [
+            'name'  => 'testName_es',
+            'title' => 'testTitle_es'
+        ]);
+
+        $testModel->translate('de', [
+            'name'  => 'testName_de',
+            'title' => 'testTitle_de'
+        ]);
+
+        $testModel->removeTranslationIn('es');
+
+        $allTranslations = $testModel->allTranslations();
+
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $allTranslations);
+        $this->assertEquals(1, $allTranslations->count());
+
+    }
+
+
+
+    /**
+     * @return void
+     */
+    public function test_it_removes_an_attributes_translation()
+    {
+
+        $testModel = factory(TestModel::class)->create([
+            'name'      => 'testName',
+            'title'     => 'testTitle'
+        ]);
+
+        $testModel->translate('es', [
+            'name'  => 'testName_es',
+            'title' => 'testTitle_es'
+        ]);
+
+        $testModel->translate('de', [
+            'name'  => 'testName_de',
+            'title' => 'testTitle_de'
+        ]);
+
+        $testModel->removeTranslation('es', 'name');
+
+        $this->assertEquals('testName', $testModel->in('es')->name);
+        $this->assertEquals('testTitle_es', $testModel->in('es')->title);
 
     }
 

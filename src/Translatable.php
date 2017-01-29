@@ -35,7 +35,11 @@ trait Translatable {
         foreach ( $this->getAttributes() as $attribute => $value ) {
 
             if ( $this->isTranslatableAttribute( $attribute ) ) {
-                $translatedModel->setAttribute($attribute, $this->getTranslation($attribute, $locale));
+                if( $this->hasTranslation( $locale, $attribute ) ) {
+                    $translatedModel->setAttribute($attribute, $this->getTranslation($attribute, $locale));
+                } else {
+                    $translatedModel->setAttribute($attribute, $this->getAttribute($attribute));
+                }
             } else {
                 $translatedModel->setAttribute($attribute, $this->getAttribute($attribute));
             }
@@ -45,6 +49,35 @@ trait Translatable {
         return $translatedModel;
 
     }
+
+
+
+    /**
+     * @param $locale
+     */
+    public function removeTranslationIn( $locale )
+    {
+        $this->translations()
+            ->where('locale', $locale)
+            ->delete();
+    }
+
+
+
+    /**
+     * @param $locale
+     * @param $attribute
+     */
+    public function removeTranslation( $locale, $attribute )
+    {
+        $this->translations()
+            ->where('locale', $locale)
+            ->where('key', $attribute)
+            ->delete();
+
+    }
+
+
 
     /**
      * returns the translation of a key for a given key/locale pair
@@ -59,6 +92,43 @@ trait Translatable {
             ->where('key', $key)
             ->where('locale', $locale)
             ->value('translation');
+    }
+
+
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function allTranslations()
+    {
+
+        $translations = collect([]);
+
+        $attributes = $this->getAttributes();
+
+        $locales = $this->translations()->get()->groupBy('locale')->keys();
+
+        foreach ( $locales as $locale ) {
+
+            $translation = collect([]);
+
+            foreach ( $attributes as $attribute => $value ) {
+
+                if ( $this->isTranslatableAttribute( $attribute ) && $this->hasTranslation( $locale, $attribute ) ) {
+
+                    $translation->put($attribute, $this->getTranslation( $attribute, $locale ));
+                } else {
+                    $translation->put($attribute, parent::getAttributeValue($attribute));
+                }
+
+            }
+
+            $translations->put($locale, $translation);
+
+        }
+
+        return $translations;
+
     }
 
     /**
@@ -106,6 +176,23 @@ trait Translatable {
 
     /**
      * @param $locale
+     * @param $attribute
+     * @return bool
+     */
+    protected function hasTranslation( $locale, $attribute )
+    {
+        $translation = $this->translations()
+            ->where('locale', $locale)
+            ->where('key', $attribute)
+            ->first();
+
+        return $translation !== null;
+    }
+
+
+
+    /**
+     * @param $locale
      * @param $translations
      * @return void
      */
@@ -113,7 +200,19 @@ trait Translatable {
     {
         foreach ( $translations as $attribute => $translation ) {
             if ( $this->isTranslatableAttribute($attribute) ) {
-                $this->setTranslation($locale, $attribute, $translation);
+
+                $storedTranslation = $this->translations()
+                    ->where('locale', $locale)
+                    ->where('key', $attribute)
+                    ->first();
+
+                if ( $storedTranslation ) {
+                    $this->updateTranslation($locale, $attribute, $translation);
+                } else {
+                    $this->setTranslation($locale, $attribute, $translation);
+                }
+
+
             }
         }
     }
@@ -134,6 +233,26 @@ trait Translatable {
             'locale'            => $locale,
         ]);
     }
+
+
+
+    /**
+     * @param $locale
+     * @param $attribute
+     * @param $translation
+     * @return void
+     */
+    protected function updateTranslation($locale, $attribute, $translation)
+    {
+        $this->translations()
+            ->where('key', $attribute)
+            ->where('locale', $locale)
+            ->update([
+                'translation' => $translation,
+            ]);
+    }
+
+
 
     /**
      * returns if given key is translatable
