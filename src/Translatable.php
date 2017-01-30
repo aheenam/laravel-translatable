@@ -250,7 +250,7 @@ trait Translatable
     /**
      * @param $method
      * @param $arguments
-     * @return bool|mixed
+     * @return mixed
      */
     public function __call($method, $arguments)
     {
@@ -260,6 +260,6 @@ trait Translatable
             return call_user_func_array([$this, 'translateAttribute'], $arguments);
         }
 
-        return false;
+        return call_user_func_array([$this, $method], $arguments);
     }
 }
