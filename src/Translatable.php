@@ -4,22 +4,21 @@ namespace Aheenam\Translatable;
 
 use Illuminate\Support\Facades\App;
 
-trait Translatable {
+trait Translatable
+{
 
 
     /**
      * @param $key
      * @return mixed
      */
-    public function getAttributeValue( $key )
+    public function getAttributeValue($key)
     {
-
-        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == App::getLocale() ) {
+        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == App::getLocale()) {
             return parent::getAttributeValue($key);
         }
 
         return $this->getTranslation($key, App::getLocale());
-
     }
 
 
@@ -27,15 +26,13 @@ trait Translatable {
      * @param $locale
      * @return Translatable
      */
-    public function in( $locale )
+    public function in($locale)
     {
-
         $translatedModel = new self();
 
-        foreach ( $this->getAttributes() as $attribute => $value ) {
-
-            if ( $this->isTranslatableAttribute( $attribute ) ) {
-                if( $this->hasTranslation( $locale, $attribute ) ) {
+        foreach ($this->getAttributes() as $attribute => $value) {
+            if ($this->isTranslatableAttribute($attribute)) {
+                if ($this->hasTranslation($locale, $attribute)) {
                     $translatedModel->setAttribute($attribute, $this->getTranslation($attribute, $locale));
                 } else {
                     $translatedModel->setAttribute($attribute, $this->getAttribute($attribute));
@@ -43,11 +40,9 @@ trait Translatable {
             } else {
                 $translatedModel->setAttribute($attribute, $this->getAttribute($attribute));
             }
-
         }
 
         return $translatedModel;
-
     }
 
 
@@ -55,7 +50,7 @@ trait Translatable {
     /**
      * @param $locale
      */
-    public function removeTranslationIn( $locale )
+    public function removeTranslationIn($locale)
     {
         $this->translations()
             ->where('locale', $locale)
@@ -68,13 +63,12 @@ trait Translatable {
      * @param $locale
      * @param $attribute
      */
-    public function removeTranslation( $locale, $attribute )
+    public function removeTranslation($locale, $attribute)
     {
         $this->translations()
             ->where('locale', $locale)
             ->where('key', $attribute)
             ->delete();
-
     }
 
 
@@ -86,7 +80,7 @@ trait Translatable {
      * @param $locale
      * @return mixed
      */
-    protected function getTranslation( $key, $locale )
+    protected function getTranslation($key, $locale)
     {
         return $this->translations()
             ->where('key', $key)
@@ -101,34 +95,27 @@ trait Translatable {
      */
     public function allTranslations()
     {
-
         $translations = collect([]);
 
         $attributes = $this->getAttributes();
 
         $locales = $this->translations()->get()->groupBy('locale')->keys();
 
-        foreach ( $locales as $locale ) {
-
+        foreach ($locales as $locale) {
             $translation = collect([]);
 
-            foreach ( $attributes as $attribute => $value ) {
-
-                if ( $this->isTranslatableAttribute( $attribute ) && $this->hasTranslation( $locale, $attribute ) ) {
-
-                    $translation->put($attribute, $this->getTranslation( $attribute, $locale ));
+            foreach ($attributes as $attribute => $value) {
+                if ($this->isTranslatableAttribute($attribute) && $this->hasTranslation($locale, $attribute)) {
+                    $translation->put($attribute, $this->getTranslation($attribute, $locale));
                 } else {
                     $translation->put($attribute, parent::getAttributeValue($attribute));
                 }
-
             }
 
             $translations->put($locale, $translation);
-
         }
 
         return $translations;
-
     }
 
     /**
@@ -147,7 +134,7 @@ trait Translatable {
     public function getTranslatableAttributes()
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        return ( property_exists(static::class, 'translatable') && is_array($this->translatable) )
+        return (property_exists(static::class, 'translatable') && is_array($this->translatable))
             ? $translatableAttributes = $this->translatable
             : [];
     }
@@ -161,15 +148,13 @@ trait Translatable {
      * @param $locale
      * @return mixed
      */
-    protected function translateAttribute( $key, $locale )
+    protected function translateAttribute($key, $locale)
     {
-
-        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale ) {
+        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale) {
             return parent::getAttributeValue($key);
         }
 
         return $this->getTranslation($key, $locale);
-
     }
 
 
@@ -179,7 +164,7 @@ trait Translatable {
      * @param $attribute
      * @return bool
      */
-    protected function hasTranslation( $locale, $attribute )
+    protected function hasTranslation($locale, $attribute)
     {
         $translation = $this->translations()
             ->where('locale', $locale)
@@ -196,23 +181,20 @@ trait Translatable {
      * @param $translations
      * @return void
      */
-    protected function setTranslationByArray ( $locale, $translations )
+    protected function setTranslationByArray($locale, $translations)
     {
-        foreach ( $translations as $attribute => $translation ) {
-            if ( $this->isTranslatableAttribute($attribute) ) {
-
+        foreach ($translations as $attribute => $translation) {
+            if ($this->isTranslatableAttribute($attribute)) {
                 $storedTranslation = $this->translations()
                     ->where('locale', $locale)
                     ->where('key', $attribute)
                     ->first();
 
-                if ( $storedTranslation ) {
+                if ($storedTranslation) {
                     $this->updateTranslation($locale, $attribute, $translation);
                 } else {
                     $this->setTranslation($locale, $attribute, $translation);
                 }
-
-
             }
         }
     }
@@ -272,15 +254,12 @@ trait Translatable {
      */
     public function __call($method, $arguments)
     {
-
-        if ( $method === 'translate' && count($arguments) === 2 && is_array($arguments[1]) ) {
+        if ($method === 'translate' && count($arguments) === 2 && is_array($arguments[1])) {
             return call_user_func_array([$this, 'setTranslationByArray'], $arguments);
-        } elseif ( $method === 'translate' && count($arguments) === 2 && !is_array($arguments[1]) ) {
+        } elseif ($method === 'translate' && count($arguments) === 2 && !is_array($arguments[1])) {
             return call_user_func_array([$this, 'translateAttribute'], $arguments);
         }
 
         return false;
-
     }
-
 }

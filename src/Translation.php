@@ -4,7 +4,8 @@ namespace Aheenam\Translatable;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Translation extends Model {
+class Translation extends Model
+{
 
     /**
      * @var string
@@ -22,5 +23,4 @@ class Translation extends Model {
     {
         return $this->morphTo();
     }
-
 }
