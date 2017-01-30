@@ -2,7 +2,6 @@
 
 namespace Aheenam\Translatable\Test;
 
-
 use Aheenam\Translatable\Test\Models\TestModel;
 use Aheenam\Translatable\Translation;
 use Illuminate\Support\Facades\App;
@@ -41,7 +40,6 @@ class TranslatableTest extends TestCase
             ->value('translation');
 
         $this->assertEquals('TestWert', $deName);
-
     }
 
     /**
@@ -66,7 +64,6 @@ class TranslatableTest extends TestCase
 
         // assert that the value of attribute "name" is the translated value
         $this->assertEquals($testModel->name, 'testValue_fr');
-
     }
 
     public function test_avoid_translating_attribute_if_not_in_translatable_array()
@@ -96,7 +93,6 @@ class TranslatableTest extends TestCase
             ->where('key', 'place')
             ->first();
         $this->assertNull($placeTranslation);
-
     }
 
 
@@ -123,7 +119,6 @@ class TranslatableTest extends TestCase
         $this->assertEquals('testName_de', $testModel->in('de')->name);
         $this->assertEquals('testName', $testModel->name);
         $this->assertEquals('testPlace', $testModel->in('de')->place);
-
     }
 
 
@@ -144,10 +139,8 @@ class TranslatableTest extends TestCase
             'name' => 'testName_de'
         ]);
 
-        $this->assertEquals( 'testName_de', $testModel->translate('name', 'de' ) );
-        $this->assertEquals( 'testPlace', $testModel->translate('place', 'de' ) );
-
-
+        $this->assertEquals('testName_de', $testModel->translate('name', 'de'));
+        $this->assertEquals('testPlace', $testModel->translate('place', 'de'));
     }
 
 
@@ -180,7 +173,6 @@ class TranslatableTest extends TestCase
 
         $this->assertEquals(1, $translationsCount);
         $this->assertEquals('testName_de_update', $testModel->in('de')->name);
-
     }
 
 
@@ -220,7 +212,6 @@ class TranslatableTest extends TestCase
 
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $allTranslations);
         $this->assertEquals(4, $allTranslations->count());
-
     }
 
 
@@ -242,7 +233,6 @@ class TranslatableTest extends TestCase
         ]);
 
         $this->assertEquals('testTitle', $testModel->in('es')->title);
-
     }
 
 
@@ -252,7 +242,6 @@ class TranslatableTest extends TestCase
      */
     public function test_it_removes_a_complete_locale()
     {
-
         $testModel = factory(TestModel::class)->create([
             'name'      => 'testName',
             'title'     => 'testTitle'
@@ -274,7 +263,6 @@ class TranslatableTest extends TestCase
 
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $allTranslations);
         $this->assertEquals(1, $allTranslations->count());
-
     }
 
 
@@ -284,7 +272,6 @@ class TranslatableTest extends TestCase
      */
     public function test_it_removes_an_attributes_translation()
     {
-
         $testModel = factory(TestModel::class)->create([
             'name'      => 'testName',
             'title'     => 'testTitle'
@@ -304,8 +291,5 @@ class TranslatableTest extends TestCase
 
         $this->assertEquals('testName', $testModel->in('es')->name);
         $this->assertEquals('testTitle_es', $testModel->in('es')->title);
-
     }
-
-
 }

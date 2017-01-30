@@ -1,5 +1,5 @@
 vendor/
-node_modules/
 .idea/
 composer.lock
 .php_cs.cache
+build/

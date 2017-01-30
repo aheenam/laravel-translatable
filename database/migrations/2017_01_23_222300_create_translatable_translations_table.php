@@ -14,7 +14,6 @@ class CreateTranslatableTranslationsTable extends Migration
     public function up()
     {
         Schema::create('translatable_translations', function (Blueprint $table) {
-
             $table->increments('id');
             $table->string('translatable_type');
             $table->integer('translatable_id');
@@ -24,7 +23,6 @@ class CreateTranslatableTranslationsTable extends Migration
             $table->timestamps();
 
             $table->index(['translatable_id', 'translatable_type']);
-
         });
     }
 

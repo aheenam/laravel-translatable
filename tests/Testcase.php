@@ -2,11 +2,11 @@
 
 namespace Aheenam\Translatable\Test;
 
-
 use Aheenam\Translatable\TranslatableServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-abstract class TestCase extends Orchestra {
+abstract class TestCase extends Orchestra
+{
 
     /**
      * Setup the test environment.
@@ -25,7 +25,6 @@ abstract class TestCase extends Orchestra {
         ]);
 
         $this->withFactories(__DIR__ . '/../database/factories');
-
     }
 
     /**
@@ -55,6 +54,4 @@ abstract class TestCase extends Orchestra {
             'prefix'   => '',
         ]);
     }
-
-
 }
