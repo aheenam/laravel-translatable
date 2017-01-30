@@ -14,18 +14,6 @@ attributes as jsons
 2. [dimsav/laravel-translatable](https://github.com/dimsav/laravel-translatable) expects a new table for
 every new model that has translatable attributes
 
-## Todo
-
-This project has not reached a stable status, there are still some methods that must be implemented before v1.0
-can be released
-
-- -[remove an attributes translation]
-- -[remove all (or a locale's) translations of an model]
-- -[return default value if translation is not present]
-- -[make sure that translation is updated on multiple saves]
-- -[returns all translations]
-- do some refactoring
-
 Installation
 ---
 You can install the package via composer:
