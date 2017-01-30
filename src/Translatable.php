@@ -8,6 +8,37 @@ trait Translatable
 {
 
 
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function allTranslations()
+    {
+        $translations = collect([]);
+
+        $attributes = $this->getAttributes();
+
+        $locales = $this->translations()->get()->groupBy('locale')->keys();
+
+        foreach ($locales as $locale) {
+            $translation = collect([]);
+
+            foreach ($attributes as $attribute => $value) {
+                if ($this->isTranslatableAttribute($attribute) && $this->hasTranslation($locale, $attribute)) {
+                    $translation->put($attribute, $this->getTranslation($attribute, $locale));
+                } else {
+                    $translation->put($attribute, parent::getAttributeValue($attribute));
+                }
+            }
+
+            $translations->put($locale, $translation);
+        }
+
+        return $translations;
+    }
+
+
+
     /**
      * @param $key
      * @return mixed
@@ -20,6 +51,22 @@ trait Translatable
 
         return $this->getTranslation($key, App::getLocale());
     }
+
+
+
+    /**
+     * returns all attributes that are translatable
+     *
+     * @return array
+     */
+    public function getTranslatableAttributes()
+    {
+        /** @noinspection PhpUndefinedFieldInspection */
+        return (property_exists(static::class, 'translatable') && is_array($this->translatable))
+            ? $translatableAttributes = $this->translatable
+            : [];
+    }
+
 
 
     /**
@@ -74,6 +121,16 @@ trait Translatable
 
 
     /**
+     * @return mixed
+     */
+    public function translations()
+    {
+        return $this->morphMany(Translation::class, 'translatable');
+    }
+
+
+
+    /**
      * returns the translation of a key for a given key/locale pair
      *
      * @param $key
@@ -91,75 +148,6 @@ trait Translatable
 
 
     /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function allTranslations()
-    {
-        $translations = collect([]);
-
-        $attributes = $this->getAttributes();
-
-        $locales = $this->translations()->get()->groupBy('locale')->keys();
-
-        foreach ($locales as $locale) {
-            $translation = collect([]);
-
-            foreach ($attributes as $attribute => $value) {
-                if ($this->isTranslatableAttribute($attribute) && $this->hasTranslation($locale, $attribute)) {
-                    $translation->put($attribute, $this->getTranslation($attribute, $locale));
-                } else {
-                    $translation->put($attribute, parent::getAttributeValue($attribute));
-                }
-            }
-
-            $translations->put($locale, $translation);
-        }
-
-        return $translations;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function translations()
-    {
-        return $this->morphMany(Translation::class, 'translatable');
-    }
-
-    /**
-     * returns all attributes that are translatable
-     *
-     * @return array
-     */
-    public function getTranslatableAttributes()
-    {
-        /** @noinspection PhpUndefinedFieldInspection */
-        return (property_exists(static::class, 'translatable') && is_array($this->translatable))
-            ? $translatableAttributes = $this->translatable
-            : [];
-    }
-
-
-
-    /**
-     * returns the translation of a key for a given key/locale pair
-     *
-     * @param $key
-     * @param $locale
-     * @return mixed
-     */
-    protected function translateAttribute($key, $locale)
-    {
-        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale) {
-            return parent::getAttributeValue($key);
-        }
-
-        return $this->getTranslation($key, $locale);
-    }
-
-
-
-    /**
      * @param $locale
      * @param $attribute
      * @return bool
@@ -172,6 +160,36 @@ trait Translatable
             ->first();
 
         return $translation !== null;
+    }
+
+
+
+    /**
+     * returns if given key is translatable
+     *
+     * @param $key
+     * @return bool
+     */
+    protected function isTranslatableAttribute($key)
+    {
+        return in_array($key, $this->getTranslatableAttributes());
+    }
+
+
+
+    /**
+     * @param $locale
+     * @param $attribute
+     * @param $translation
+     * @return void
+     */
+    protected function setTranslation($locale, $attribute, $translation)
+    {
+        $this->translations()->create([
+            'key'               => $attribute,
+            'translation'       => $translation,
+            'locale'            => $locale,
+        ]);
     }
 
 
@@ -202,18 +220,19 @@ trait Translatable
 
 
     /**
+     * returns the translation of a key for a given key/locale pair
+     *
+     * @param $key
      * @param $locale
-     * @param $attribute
-     * @param $translation
-     * @return void
+     * @return mixed
      */
-    protected function setTranslation($locale, $attribute, $translation)
+    protected function translateAttribute($key, $locale)
     {
-        $this->translations()->create([
-            'key'               => $attribute,
-            'translation'       => $translation,
-            'locale'            => $locale,
-        ]);
+        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale) {
+            return parent::getAttributeValue($key);
+        }
+
+        return $this->getTranslation($key, $locale);
     }
 
 
@@ -235,17 +254,6 @@ trait Translatable
     }
 
 
-
-    /**
-     * returns if given key is translatable
-     *
-     * @param $key
-     * @return bool
-     */
-    protected function isTranslatableAttribute($key)
-    {
-        return in_array($key, $this->getTranslatableAttributes());
-    }
 
     /**
      * @param $method
