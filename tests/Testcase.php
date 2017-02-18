@@ -3,6 +3,8 @@
 namespace Aheenam\Translatable\Test;
 
 use Aheenam\Translatable\TranslatableServiceProvider;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -15,14 +17,15 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
+        Schema::create('test_models', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('place');
+            $table->string('title')->default('');
+            $table->timestamps();
+        });
 
-        // call migrations specific to our tests, e.g. to seed the db
-        // the path option should be relative to the 'path.database'
-        // path unless `--path` option is available.
-        $this->loadMigrationsFrom([
-            '--database' => 'testing',
-            '--realpath' => realpath(__DIR__.'//migrations'),
-        ]);
+        $this->artisan('migrate');
 
         $this->withFactories(__DIR__ . '/../database/factories');
     }
