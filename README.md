@@ -118,7 +118,7 @@ otherwise as a getter
 
 Changelog
 ---
-*soon*
+Check [CHANGELOG](CHANGELOG.md) for the changelog
 
 Testing
 ---
