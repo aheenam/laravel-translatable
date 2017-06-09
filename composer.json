@@ -10,7 +10,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php" : "^7.0",
+    "php": "^7.0",
     "illuminate/support": "~5.4.0",
     "illuminate/database": "~5.4.0"
   },
@@ -26,6 +26,13 @@
   "autoload-dev": {
     "psr-4": {
       "Aheenam\\Translatable\\Test\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Aheenam\\Translatable\\TranslatableServiceProvider"
+      ]
     }
   },
   "scripts": {
