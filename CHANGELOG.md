@@ -3,6 +3,10 @@ Changelog
 This changelog contains all notable change of the laravel-translatable
 package
 
+v1.2.0
+---
+- adds auto-discovery
+
 v1.1.0
 ---
 - makes this package ready for PHP 7

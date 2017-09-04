@@ -18,23 +18,13 @@ Installation
 ---
 You can install the package via composer:
 
-    composer require aheenam/laravel-translatable
-
-> Note: Until this packages has no stable version you have to add the git repository manually to the project. 
-Therefor add the following lines to your composer.json
-
-```
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/Aheenam/laravel-translatable"
-    }
-],
+```bash
+composer require aheenam/laravel-translatable
 ```
 
-Then add the service provider must be registered:
+If you are using Laravel in a version < 5.5, the service provider must be registered as a next step:
 
-```
+```php
 // config/app.php
 'providers' => [
     ...
@@ -42,7 +32,7 @@ Then add the service provider must be registered:
 ];
 ```
 
-Now you can use this Trait on any Eloquent Model of your project
+Now you can use this Trait on any Eloquent Model of your project.
 
 Usage
 ---
