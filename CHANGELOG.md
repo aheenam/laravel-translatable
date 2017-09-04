@@ -5,7 +5,11 @@ package
 
 v1.2.0
 ---
+<<<<<<< HEAD
 - adds auto-discovery
+=======
+- adds support for laravel auto-discovery
+>>>>>>> 41c696d1be4daafb463efa6056c4de357bb821c3
 
 v1.1.0
 ---
