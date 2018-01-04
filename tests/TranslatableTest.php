@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\App;
 
 class TranslatableTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -25,12 +24,12 @@ class TranslatableTest extends TestCase
         // test model with default value for attribute "name"
         $testModel = factory(TestModel::class)->create([
             'name'  => 'testValue',
-            'place' => 'France'
+            'place' => 'France',
         ]);
 
         $testModel->translate('de', [
             'name'      => 'TestWert',
-            'place'     => 'Frankreich'
+            'place'     => 'Frankreich',
         ]);
 
         $deName = $testModel->translations()->where('translatable_type', TestModel::class)
@@ -49,14 +48,14 @@ class TranslatableTest extends TestCase
     {
         // test model with default value for attribute "name"
         $testModel = factory(TestModel::class)->create([
-            'name' => 'testValue'
+            'name' => 'testValue',
         ]);
 
         // test model has translation for language "fr"
         $testModel->translations()->save(new Translation([
             'key'               => 'name',
             'translation'       => 'testValue_fr',
-            'locale'            => 'fr'
+            'locale'            => 'fr',
         ]));
 
         // app locale changes to fr
@@ -71,13 +70,13 @@ class TranslatableTest extends TestCase
         // test model with default value for attribute "name"
         $testModel = factory(TestModel::class)->create([
             'name'  => 'testValue',
-            'place' => 'France'
+            'place' => 'France',
         ]);
 
         // add some translation
         $testModel->translate('de', [
             'name'      => 'TestWert',
-            'place'     => 'Frankreich'
+            'place'     => 'Frankreich',
         ]);
 
         // change language
@@ -95,7 +94,6 @@ class TranslatableTest extends TestCase
         $this->assertNull($placeTranslation);
     }
 
-
     /**
      * @return void
      */
@@ -109,7 +107,7 @@ class TranslatableTest extends TestCase
 
         // set a translation
         $testModel->translate('de', [
-            'name' => 'testName_de'
+            'name' => 'testName_de',
         ]);
 
         // make sure that app locale is different from de
@@ -120,8 +118,6 @@ class TranslatableTest extends TestCase
         $this->assertEquals('testName', $testModel->name);
         $this->assertEquals('testPlace', $testModel->in('de')->place);
     }
-
-
 
     /**
      * @return void
@@ -136,14 +132,12 @@ class TranslatableTest extends TestCase
 
         // set a translation
         $testModel->translate('de', [
-            'name' => 'testName_de'
+            'name' => 'testName_de',
         ]);
 
         $this->assertEquals('testName_de', $testModel->translate('name', 'de'));
         $this->assertEquals('testPlace', $testModel->translate('place', 'de'));
     }
-
-
 
     /**
      * @return void
@@ -158,12 +152,12 @@ class TranslatableTest extends TestCase
 
         // set a translation
         $testModel->translate('de', [
-            'name' => 'testName_de'
+            'name' => 'testName_de',
         ]);
 
         // update a translation
         $testModel->translate('de', [
-            'name' => 'testName_de_update'
+            'name' => 'testName_de_update',
         ]);
 
         $translationsCount = $testModel->translations()
@@ -174,7 +168,6 @@ class TranslatableTest extends TestCase
         $this->assertEquals(1, $translationsCount);
         $this->assertEquals('testName_de_update', $testModel->in('de')->name);
     }
-
 
     /**
      * @return void
@@ -190,22 +183,22 @@ class TranslatableTest extends TestCase
         // set a translation
         $testModel->translate('de', [
             'name'      => 'testName_de',
-            'title'     => 'title_de'
+            'title'     => 'title_de',
         ]);
 
         // set another translation
         $testModel->translate('fr', [
-            'name' => 'testName_fr'
+            'name' => 'testName_fr',
         ]);
 
         // set another translation
         $testModel->translate('it', [
-            'name' => 'testName_it'
+            'name' => 'testName_it',
         ]);
 
         // set another translation
         $testModel->translate('es', [
-            'name' => 'testName_es'
+            'name' => 'testName_es',
         ]);
 
         $allTranslations = $testModel->allTranslations();
@@ -213,8 +206,6 @@ class TranslatableTest extends TestCase
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $allTranslations);
         $this->assertEquals(4, $allTranslations->count());
     }
-
-
 
     /**
      * @return void
@@ -224,18 +215,16 @@ class TranslatableTest extends TestCase
         // test model with default value for attribute "name"
         $testModel = factory(TestModel::class)->create([
             'name'      => 'testName',
-            'title'     => 'testTitle'
+            'title'     => 'testTitle',
         ]);
 
         // set another translation
         $testModel->translate('es', [
-            'name' => 'testName_es'
+            'name' => 'testName_es',
         ]);
 
         $this->assertEquals('testTitle', $testModel->in('es')->title);
     }
-
-
 
     /**
      * @return void
@@ -244,17 +233,17 @@ class TranslatableTest extends TestCase
     {
         $testModel = factory(TestModel::class)->create([
             'name'      => 'testName',
-            'title'     => 'testTitle'
+            'title'     => 'testTitle',
         ]);
 
         $testModel->translate('es', [
             'name'  => 'testName_es',
-            'title' => 'testTitle_es'
+            'title' => 'testTitle_es',
         ]);
 
         $testModel->translate('de', [
             'name'  => 'testName_de',
-            'title' => 'testTitle_de'
+            'title' => 'testTitle_de',
         ]);
 
         $testModel->removeTranslationIn('es');
@@ -265,8 +254,6 @@ class TranslatableTest extends TestCase
         $this->assertEquals(1, $allTranslations->count());
     }
 
-
-
     /**
      * @return void
      */
@@ -274,17 +261,17 @@ class TranslatableTest extends TestCase
     {
         $testModel = factory(TestModel::class)->create([
             'name'      => 'testName',
-            'title'     => 'testTitle'
+            'title'     => 'testTitle',
         ]);
 
         $testModel->translate('es', [
             'name'  => 'testName_es',
-            'title' => 'testTitle_es'
+            'title' => 'testTitle_es',
         ]);
 
         $testModel->translate('de', [
             'name'  => 'testName_de',
-            'title' => 'testTitle_de'
+            'title' => 'testTitle_de',
         ]);
 
         $testModel->removeTranslation('es', 'name');

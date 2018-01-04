@@ -7,9 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-abstract class TestCase extends Orchestra
+abstract class Testcase extends Orchestra
 {
-
     /**
      * Setup the test environment.
      */
@@ -27,13 +26,14 @@ abstract class TestCase extends Orchestra
 
         $this->artisan('migrate');
 
-        $this->withFactories(__DIR__ . '/../database/factories');
+        $this->withFactories(__DIR__.'/../database/factories');
     }
 
     /**
-     * add the package provider
+     * add the package provider.
      *
      * @param $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
@@ -44,7 +44,8 @@ abstract class TestCase extends Orchestra
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)

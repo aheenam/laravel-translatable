@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\App;
 
 trait Translatable
 {
-
-
-
     /**
      * @return \Illuminate\Support\Collection
      */
@@ -37,10 +34,9 @@ trait Translatable
         return $translations;
     }
 
-
-
     /**
      * @param $key
+     *
      * @return mixed
      */
     public function getAttributeValue($key)
@@ -52,25 +48,22 @@ trait Translatable
         return $this->getTranslation($key, App::getLocale());
     }
 
-
-
     /**
-     * returns all attributes that are translatable
+     * returns all attributes that are translatable.
      *
      * @return array
      */
     public function getTranslatableAttributes()
     {
-        /** @noinspection PhpUndefinedFieldInspection */
+        /* @noinspection PhpUndefinedFieldInspection */
         return (property_exists(static::class, 'translatable') && is_array($this->translatable))
             ? $translatableAttributes = $this->translatable
             : [];
     }
 
-
-
     /**
      * @param $locale
+     *
      * @return Translatable
      */
     public function in($locale)
@@ -92,8 +85,6 @@ trait Translatable
         return $translatedModel;
     }
 
-
-
     /**
      * @param $locale
      */
@@ -103,8 +94,6 @@ trait Translatable
             ->where('locale', $locale)
             ->delete();
     }
-
-
 
     /**
      * @param $locale
@@ -118,8 +107,6 @@ trait Translatable
             ->delete();
     }
 
-
-
     /**
      * @return mixed
      */
@@ -128,13 +115,12 @@ trait Translatable
         return $this->morphMany(Translation::class, 'translatable');
     }
 
-
-
     /**
-     * returns the translation of a key for a given key/locale pair
+     * returns the translation of a key for a given key/locale pair.
      *
      * @param $key
      * @param $locale
+     *
      * @return mixed
      */
     protected function getTranslation($key, $locale)
@@ -145,11 +131,10 @@ trait Translatable
             ->value('translation');
     }
 
-
-
     /**
      * @param $locale
      * @param $attribute
+     *
      * @return bool
      */
     protected function hasTranslation($locale, $attribute)
@@ -162,12 +147,11 @@ trait Translatable
         return $translation !== null;
     }
 
-
-
     /**
-     * returns if given key is translatable
+     * returns if given key is translatable.
      *
      * @param $key
+     *
      * @return bool
      */
     protected function isTranslatableAttribute($key)
@@ -175,12 +159,11 @@ trait Translatable
         return in_array($key, $this->getTranslatableAttributes());
     }
 
-
-
     /**
      * @param $locale
      * @param $attribute
      * @param $translation
+     *
      * @return void
      */
     protected function setTranslation($locale, $attribute, $translation)
@@ -192,11 +175,10 @@ trait Translatable
         ]);
     }
 
-
-
     /**
      * @param $locale
      * @param $translations
+     *
      * @return void
      */
     protected function setTranslationByArray($locale, $translations)
@@ -217,13 +199,12 @@ trait Translatable
         }
     }
 
-
-
     /**
-     * returns the translation of a key for a given key/locale pair
+     * returns the translation of a key for a given key/locale pair.
      *
      * @param $key
      * @param $locale
+     *
      * @return mixed
      */
     protected function translateAttribute($key, $locale)
@@ -235,12 +216,11 @@ trait Translatable
         return $this->getTranslation($key, $locale);
     }
 
-
-
     /**
      * @param $locale
      * @param $attribute
      * @param $translation
+     *
      * @return void
      */
     protected function updateTranslation($locale, $attribute, $translation)
@@ -253,11 +233,10 @@ trait Translatable
             ]);
     }
 
-
-
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)
