@@ -41,7 +41,7 @@ trait Translatable
      */
     public function getAttributeValue($key)
     {
-        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == App::getLocale()) {
+        if (! $this->isTranslatableAttribute($key) || config('app.fallback_locale') == App::getLocale()) {
             return parent::getAttributeValue($key);
         }
 
@@ -209,7 +209,7 @@ trait Translatable
      */
     protected function translateAttribute($key, $locale)
     {
-        if (!$this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale) {
+        if (! $this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale) {
             return parent::getAttributeValue($key);
         }
 
@@ -243,7 +243,7 @@ trait Translatable
     {
         if ($method === 'translate' && count($arguments) === 2 && is_array($arguments[1])) {
             return call_user_func_array([$this, 'setTranslationByArray'], $arguments);
-        } elseif ($method === 'translate' && count($arguments) === 2 && !is_array($arguments[1])) {
+        } elseif ($method === 'translate' && count($arguments) === 2 && ! is_array($arguments[1])) {
             return call_user_func_array([$this, 'translateAttribute'], $arguments);
         }
 
