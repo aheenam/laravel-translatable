@@ -2,9 +2,9 @@
 
 namespace Aheenam\Translatable\Test;
 
-use Aheenam\Translatable\Test\Models\TestModel;
-use Aheenam\Translatable\Translation;
 use Illuminate\Support\Facades\App;
+use Aheenam\Translatable\Translation;
+use Aheenam\Translatable\Test\Models\TestModel;
 
 class TranslatableTest extends TestCase
 {

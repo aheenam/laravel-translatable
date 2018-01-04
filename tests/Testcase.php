@@ -2,10 +2,10 @@
 
 namespace Aheenam\Translatable\Test;
 
-use Aheenam\Translatable\TranslatableServiceProvider;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Aheenam\Translatable\TranslatableServiceProvider;
 
 abstract class Testcase extends Orchestra
 {
