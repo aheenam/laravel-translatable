@@ -22,16 +22,6 @@ You can install the package via composer:
 composer require aheenam/laravel-translatable
 ```
 
-If you are using Laravel in a version < 5.5, the service provider must be registered as a next step:
-
-```php
-// config/app.php
-'providers' => [
-    ...
-    Aheenam\Translatable\TranslatableServiceProvider::class,
-];
-```
-
 Now you can use this Trait on any Eloquent Model of your project.
 
 Usage
