@@ -2,8 +2,8 @@
 
 namespace Aheenam\Translatable;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 
 trait Translatable
 {
