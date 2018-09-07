@@ -3,13 +3,11 @@
 namespace Aheenam\Translatable;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Collection;
 
 trait Translatable
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function allTranslations()
+    public function allTranslations(): Collection
     {
         $translations = collect([]);
 
@@ -35,7 +33,7 @@ trait Translatable
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -48,12 +46,7 @@ trait Translatable
         return $this->getTranslation($key, App::getLocale());
     }
 
-    /**
-     * returns all attributes that are translatable.
-     *
-     * @return array
-     */
-    public function getTranslatableAttributes()
+    public function getTranslatableAttributes(): array
     {
         /* @noinspection PhpUndefinedFieldInspection */
         return (property_exists(static::class, 'translatable') && is_array($this->translatable))
@@ -62,11 +55,9 @@ trait Translatable
     }
 
     /**
-     * @param $locale
-     *
      * @return Translatable
      */
-    public function in($locale)
+    public function in(string $locale)
     {
         $translatedModel = new self();
 
@@ -85,21 +76,14 @@ trait Translatable
         return $translatedModel;
     }
 
-    /**
-     * @param $locale
-     */
-    public function removeTranslationIn($locale)
+    public function removeTranslationIn(string $locale)
     {
         $this->translations()
             ->where('locale', $locale)
             ->delete();
     }
 
-    /**
-     * @param $locale
-     * @param $attribute
-     */
-    public function removeTranslation($locale, $attribute)
+    public function removeTranslation(string $locale, string $attribute)
     {
         $this->translations()
             ->where('locale', $locale)
@@ -118,12 +102,9 @@ trait Translatable
     /**
      * returns the translation of a key for a given key/locale pair.
      *
-     * @param $key
-     * @param $locale
-     *
      * @return mixed
      */
-    protected function getTranslation($key, $locale)
+    protected function getTranslation(string $key, string $locale)
     {
         return $this->translations()
             ->where('key', $key)
@@ -131,13 +112,7 @@ trait Translatable
             ->value('translation');
     }
 
-    /**
-     * @param $locale
-     * @param $attribute
-     *
-     * @return bool
-     */
-    protected function hasTranslation($locale, $attribute)
+    protected function hasTranslation(string $locale, string $attribute): bool
     {
         $translation = $this->translations()
             ->where('locale', $locale)
@@ -147,26 +122,12 @@ trait Translatable
         return $translation !== null;
     }
 
-    /**
-     * returns if given key is translatable.
-     *
-     * @param $key
-     *
-     * @return bool
-     */
-    protected function isTranslatableAttribute($key)
+    protected function isTranslatableAttribute(string $key): bool
     {
         return in_array($key, $this->getTranslatableAttributes());
     }
 
-    /**
-     * @param $locale
-     * @param $attribute
-     * @param $translation
-     *
-     * @return void
-     */
-    protected function setTranslation($locale, $attribute, $translation)
+    protected function setTranslation(string $locale, string $attribute, string $translation): void
     {
         $this->translations()->create([
             'key'               => $attribute,
@@ -175,13 +136,7 @@ trait Translatable
         ]);
     }
 
-    /**
-     * @param $locale
-     * @param $translations
-     *
-     * @return void
-     */
-    protected function setTranslationByArray($locale, $translations)
+    protected function setTranslationByArray(string $locale, array $translations): void
     {
         foreach ($translations as $attribute => $translation) {
             if ($this->isTranslatableAttribute($attribute)) {
@@ -200,14 +155,9 @@ trait Translatable
     }
 
     /**
-     * returns the translation of a key for a given key/locale pair.
-     *
-     * @param $key
-     * @param $locale
-     *
      * @return mixed
      */
-    protected function translateAttribute($key, $locale)
+    protected function translateAttribute(string $key, string $locale)
     {
         if (! $this->isTranslatableAttribute($key) || config('app.fallback_locale') == $locale) {
             return parent::getAttributeValue($key);
@@ -216,14 +166,7 @@ trait Translatable
         return $this->getTranslation($key, $locale);
     }
 
-    /**
-     * @param $locale
-     * @param $attribute
-     * @param $translation
-     *
-     * @return void
-     */
-    protected function updateTranslation($locale, $attribute, $translation)
+    protected function updateTranslation(string $locale, string $attribute, string $translation): void
     {
         $this->translations()
             ->where('key', $attribute)
@@ -234,8 +177,8 @@ trait Translatable
     }
 
     /**
-     * @param $method
-     * @param $arguments
+     * @param string $method
+     * @param array $parameters
      *
      * @return mixed
      */
