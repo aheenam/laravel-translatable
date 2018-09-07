@@ -11,14 +11,6 @@ class TranslatableTest extends TestCase
     /**
      * @return void
      */
-    public function test_is_test_running()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @return void
-     */
     public function test_saves_translation()
     {
         // test model with default value for attribute "name"
