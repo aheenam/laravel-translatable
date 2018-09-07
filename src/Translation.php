@@ -3,6 +3,7 @@
 namespace Aheenam\Translatable;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Translation extends Model
 {
@@ -15,10 +16,8 @@ class Translation extends Model
 
     /**
      * Get all of the owning translatable models.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function translatable()
+    public function translatable(): MorphTo
     {
         return $this->morphTo();
     }
