@@ -3,6 +3,15 @@ Changelog
 This changelog contains all notable change of the laravel-translatable
 package
 
+2.0.0
+---
+
+Starting this version this package will do its best to follow semver versions.
+
+- adds support for Laravel 5.8
+- drops support for Laravel 5.6
+- drops support for PHP 7.1
+
 1.3.0
 ---
 

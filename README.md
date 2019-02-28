@@ -14,6 +14,10 @@ attributes as jsons
 2. [dimsav/laravel-translatable](https://github.com/dimsav/laravel-translatable) expects a new table for
 every new model that has translatable attributes
 
+## Requirements
+
+This package require a minimum Laravel version of `5.7` and PHP in version `7.2`
+
 Installation
 ---
 You can install the package via composer:
